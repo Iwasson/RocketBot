@@ -8,6 +8,7 @@ bot({
     password: keys.password,
     // use ssl for https
     ssl: true,
+    pretty: false,
     // join room(s)
     rooms: ['bots'],
     // when ready (e.log.info logs to console, can also console.log)
@@ -15,6 +16,22 @@ bot({
     // on message
     onMessage: async event => {
       if (event.flags.isMentioned)
-        event.respond(`hi ${event.message.author.name} thanks for mentioning me`)
+      {
+        const words = event.message.content.split(' ');
+        const operation = words[1] ? words[1].toLowerCase() : ''
+        event.log.info(`operation is "${operation}"`)
+
+        //event.respond(`hi ${event.message.author.name} thanks for mentioning me`)
+        processCommand(words, event);
+      }
     }
   });
+
+
+  function processCommand(words, event)
+  {
+      if(words[1] == "help")
+      {
+          event.respond("Here are the commands that you can use:");
+      }
+  }
