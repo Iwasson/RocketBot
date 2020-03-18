@@ -1,11 +1,13 @@
 const bot = require('node-rocketchat-bot');
 const keys = require('./keys.json');
+const fs = require('fs');
 
 //stores a playable characters information
 class character 
 {
-  constructor(name) 
+  constructor(auth, name) 
   {
+    this.owner = auth;
     this.name = name;   //players name
     this.health = 100;  //health value
     this.mana = 100;    //mana value
@@ -80,10 +82,31 @@ bot({
 
   function processCommand(words, event)
   {
-      if(words[1] == "help")
-      {
-          event.respond("Here are the commands that you can use:");
-      }
+    switch(words[1])
+    {
+      case "help":
+        event.respond("You shall not pass!");
+        break;
+      case "create":
+        makeAccount(event.message.author.name, words);
+        break;
+    }
+      
   }
 
-  
+  //allows a user to make a character that is attached to
+  //their rocket nick, can only have one per person
+  async function makeAccount(auth, words)
+  {
+    //need to check and see if a user has an account already
+
+    //attach name to the new character
+    //let auth = event.message.author.name;
+    let temp = new character(auth, words[2].toString());
+    console.log("New Account made: " + words[2] + " by user: " + auth);
+    
+    //save the character to the database
+    fs.appendFile('./database.txt', temp.auth + '/' + temp.name + '/' + temp.health + '/' + temp.mana + '/' + temp.money + '/' + temp.exp + '\n', (err) => {
+      if (err) { throw (err); }
+    });
+  }
