@@ -1,10 +1,11 @@
 const bot = require('node-rocketchat-bot');
+const keys = require('./keys.json');
 
 bot({
     // recommended - using 'dotenv' library with .env file
-    host: 'HOSTNAME',
-    username: 'USERNAME',
-    password: 'PASSWORD',
+    host: keys.host,
+    username: keys.username,
+    password: keys.password,
     // use ssl for https
     ssl: true,
     // join room(s)
