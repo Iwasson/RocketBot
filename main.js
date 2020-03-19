@@ -106,7 +106,7 @@ bot({
     console.log("New Account made: " + words[2] + " by user: " + auth);
     
     //save the character to the database
-    fs.appendFile('./database.txt', temp.auth + '/' + temp.name + '/' + temp.health + '/' + temp.mana + '/' + temp.money + '/' + temp.exp + '\n', (err) => {
+    fs.appendFile('./database.txt', temp.owner + '/' + temp.name + '/' + temp.health + '/' + temp.mana + '/' + temp.money + '/' + temp.exp + '\n', (err) => {
       if (err) { throw (err); }
     });
   }
