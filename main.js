@@ -15,6 +15,11 @@ class character {
     this.class = "none";
   }
 
+  //gives a readout of the players stats
+  displayStats() {
+
+  }
+
 }
 
 //stores npc information
@@ -72,14 +77,25 @@ bot({
   }
 });
 
-
+//converts commands into actions. words[1] is the command and 
+//everything after is a flag or argument
 function processCommand(words, event) {
   switch (words[1].toLowerCase()) {
     case "help":
-      event.respond("You shall not pass!");
+      //if the user has an account then tell them commands that affect their account
+      if (hasAccount) {
+        event.respond("<Status> to get a readout of your current status");
+      }
+      //otherwise tell them to make an account
+      else {
+        event.respond("I shall take you on a quest, but first you must make an account! \n(Use Create <character name> to make an account)");
+      }
       break;
     case "create":
       makeAccount(event, words);
+      break;
+    case "status":
+      displayStats(event);
       break;
   }
 
@@ -89,21 +105,8 @@ function processCommand(words, event) {
 //their rocket nick, can only have one per person
 async function makeAccount(event, words) {
   let auth = event.message.author.name;
-  let made = false;
-  //need to check and see if a user has an account already
-  let characters = fs.readFileSync("./database.txt", "utf-8");
-  let arrayCharacters = characters.split("\n");
 
-  arrayCharacters.forEach(element => {
-    if (element.startsWith(auth)) {
-      event.respond("You already have a character!");
-      made = true;
-    }
-  });
-
-  if (made == false) {
-
-
+  if (!hasAccount(event)) {
     //attach name to the new character
     //let auth = event.message.author.name;
     let temp = new character(auth, words[2].toString());
@@ -116,4 +119,28 @@ async function makeAccount(event, words) {
 
     event.respond("Character " + temp.name + " created!");
   }
+  else {
+    event.respond("You already have a character!");
+  }
+}
+
+//returns true if they have an account and false if otherwise
+async function hasAccount(event) {
+  let auth = event.message.author.name;
+  let made = false;
+  //need to check and see if a user has an account already
+  let characters = fs.readFileSync("./database.txt", "utf-8");
+  let arrayCharacters = characters.split("\n");
+
+  arrayCharacters.forEach(element => {
+    if (element.startsWith(auth)) {
+      made = true;
+    }
+  });
+
+  return made;
+}
+
+//returns the character attached to the player
+async function getAccount(event) {
 }
