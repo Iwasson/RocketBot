@@ -11,6 +11,8 @@ class character {
     this.mana = 100;    //mana value
     this.money = 0;     //amount of money they have
     this.exp = 0;       //how much experience they have
+    this.level = 1;
+    this.class = "none";
   }
 
 }
@@ -72,7 +74,7 @@ bot({
 
 
 function processCommand(words, event) {
-  switch (words[1]) {
+  switch (words[1].toLowerCase()) {
     case "help":
       event.respond("You shall not pass!");
       break;
@@ -108,7 +110,7 @@ async function makeAccount(event, words) {
     console.log("New Account made: " + words[2] + " by user: " + auth);
 
     //save the character to the database
-    fs.appendFile('./database.txt', temp.owner + '/' + temp.name + '/' + temp.health + '/' + temp.mana + '/' + temp.money + '/' + temp.exp + '\n', (err) => {
+    fs.appendFile('./database.txt', temp.owner + '/' + temp.name + '/' + temp.health + '/' + temp.mana + '/' + temp.money + '/' + temp.exp + '/' + temp.level + '/' + temp.class + '\n', (err) => {
       if (err) { throw (err); }
     });
 
